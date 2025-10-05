@@ -64,8 +64,13 @@ export const Features = () => {
   }, []);
 
   return (
-    <section id="features" className="py-24 relative" ref={sectionRef}>
+    <section id="features" className="py-24 relative overflow-hidden" ref={sectionRef}>
       <div className="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background" />
+      
+      {/* Animated background orbs */}
+      <div className="absolute top-20 left-20 w-40 h-40 bg-primary/20 rounded-full blur-3xl animate-drift" />
+      <div className="absolute bottom-40 right-10 w-60 h-60 bg-secondary/20 rounded-full blur-3xl animate-drift" style={{ animationDelay: "2s" }} />
+      <div className="absolute top-1/2 left-1/3 w-32 h-32 bg-accent/20 rounded-full blur-2xl animate-pulse-glow" />
       
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
         <div className="text-center mb-16 space-y-4">
@@ -82,7 +87,11 @@ export const Features = () => {
             <Card
               key={index}
               className={`group glass-card border-border/50 hover:border-primary/50 transition-all duration-500 hover:shadow-lg hover:shadow-primary/10 ${
-                visibleCards.includes(index) ? "animate-fade-up" : "opacity-0"
+                visibleCards.includes(index) 
+                  ? index % 2 === 0 
+                    ? "animate-slide-in-left" 
+                    : "animate-slide-in-right" 
+                  : "opacity-0"
               }`}
               style={{ animationDelay: `${index * 100}ms` }}
             >

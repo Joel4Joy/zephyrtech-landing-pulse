@@ -27,6 +27,7 @@ const slides = [
 
 export const Carousel = () => {
   const [current, setCurrent] = useState(0);
+  const [ripples, setRipples] = useState<{ x: number; y: number; id: number }[]>([]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -36,12 +37,41 @@ export const Carousel = () => {
     return () => clearInterval(timer);
   }, []);
 
+  const handleRipple = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const id = Date.now();
+
+    setRipples((prev) => [...prev, { x, y, id }]);
+    setTimeout(() => {
+      setRipples((prev) => prev.filter((r) => r.id !== id));
+    }, 600);
+  };
+
   const next = () => setCurrent((prev) => (prev + 1) % slides.length);
   const prev = () => setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
 
   return (
-    <section className="py-24 bg-muted/30">
-      <div className="container mx-auto px-4 lg:px-8">
+    <section className="py-24 bg-muted/30 relative overflow-hidden cursor-pointer" onClick={handleRipple}>
+      {/* Ripple Effects */}
+      {ripples.map((ripple) => (
+        <div
+          key={ripple.id}
+          className="absolute w-4 h-4 rounded-full bg-primary/30 animate-ripple pointer-events-none z-50"
+          style={{
+            left: ripple.x,
+            top: ripple.y,
+            transform: "translate(-50%, -50%)",
+          }}
+        />
+      ))}
+      
+      {/* Floating orbs */}
+      <div className="absolute top-10 right-20 w-32 h-32 bg-primary/10 rounded-full blur-2xl animate-float" />
+      <div className="absolute bottom-20 left-10 w-40 h-40 bg-secondary/10 rounded-full blur-3xl animate-float" style={{ animationDelay: "1.5s" }} />
+      
+      <div className="container mx-auto px-4 lg:px-8 relative z-10">
         <div className="text-center mb-16 space-y-4">
           <h2 className="text-4xl md:text-5xl font-bold">
             See It In <span className="text-gradient">Action</span>

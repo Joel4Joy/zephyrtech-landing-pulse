@@ -57,6 +57,11 @@ export const Stats = () => {
     <section id="stats" className="py-24 relative overflow-hidden" ref={sectionRef}>
       <div className="absolute inset-0 hero-gradient opacity-5" />
       
+      {/* Animated particles */}
+      <div className="absolute top-1/4 left-10 w-24 h-24 bg-accent/20 rounded-full blur-2xl animate-pulse-glow" />
+      <div className="absolute bottom-1/4 right-20 w-36 h-36 bg-primary/20 rounded-full blur-3xl animate-drift" />
+      <div className="absolute top-1/2 left-1/2 w-28 h-28 bg-secondary/15 rounded-full blur-2xl animate-float" style={{ animationDelay: "2s" }} />
+      
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
         <div className="text-center mb-16 space-y-4">
           <h2 className="text-4xl md:text-5xl font-bold">
@@ -69,7 +74,13 @@ export const Stats = () => {
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
           {stats.map((stat, index) => (
-            <Card key={index} className="glass-card border-border/50 hover:border-primary/50 transition-all group">
+            <Card 
+              key={index} 
+              className={`glass-card border-border/50 hover:border-primary/50 transition-all group ${
+                hasAnimated ? (index % 2 === 0 ? "animate-slide-in-left" : "animate-slide-in-right") : "opacity-0"
+              }`}
+              style={{ animationDelay: `${index * 150}ms` }}
+            >
               <CardContent className="p-8 text-center space-y-4">
                 <div className="w-12 h-12 mx-auto rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center group-hover:scale-110 transition-transform">
                   <stat.icon className="w-6 h-6 text-white" />

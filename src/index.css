@@ -116,4 +116,25 @@ All colors MUST be HSL.
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+
+  .parallax-slow {
+    transform: translateY(var(--scroll-offset, 0));
+    transition: transform 0.3s ease-out;
+  }
+
+  .cinematic-overlay {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cinematic-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+      hsl(var(--primary) / 0.15), 
+      transparent 50%);
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
 }

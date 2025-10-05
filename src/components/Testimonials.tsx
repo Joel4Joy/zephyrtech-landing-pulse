@@ -31,6 +31,7 @@ const testimonials = [
 
 export const Testimonials = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [ripples, setRipples] = useState<{ x: number; y: number; id: number }[]>([]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -40,9 +41,38 @@ export const Testimonials = () => {
     return () => clearInterval(timer);
   }, []);
 
+  const handleRipple = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const id = Date.now();
+
+    setRipples((prev) => [...prev, { x, y, id }]);
+    setTimeout(() => {
+      setRipples((prev) => prev.filter((r) => r.id !== id));
+    }, 600);
+  };
+
   return (
-    <section id="testimonials" className="py-24 relative overflow-hidden">
+    <section id="testimonials" className="py-24 relative overflow-hidden cursor-pointer" onClick={handleRipple}>
       <div className="absolute inset-0 bg-gradient-to-b from-background via-secondary/5 to-background" />
+      
+      {/* Ripple Effects */}
+      {ripples.map((ripple) => (
+        <div
+          key={ripple.id}
+          className="absolute w-4 h-4 rounded-full bg-accent/30 animate-ripple pointer-events-none z-50"
+          style={{
+            left: ripple.x,
+            top: ripple.y,
+            transform: "translate(-50%, -50%)",
+          }}
+        />
+      ))}
+      
+      {/* Animated background elements */}
+      <div className="absolute top-20 left-10 w-48 h-48 bg-primary/10 rounded-full blur-3xl animate-drift" />
+      <div className="absolute bottom-20 right-10 w-40 h-40 bg-secondary/10 rounded-full blur-3xl animate-pulse-glow" />
       
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
         <div className="text-center mb-16 space-y-4">

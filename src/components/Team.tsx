@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Linkedin, Twitter, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -26,9 +27,40 @@ const team = [
 ];
 
 export const Team = () => {
+  const [ripples, setRipples] = useState<{ x: number; y: number; id: number }[]>([]);
+
+  const handleRipple = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const id = Date.now();
+
+    setRipples((prev) => [...prev, { x, y, id }]);
+    setTimeout(() => {
+      setRipples((prev) => prev.filter((r) => r.id !== id));
+    }, 600);
+  };
+
   return (
-    <section id="team" className="py-24 bg-muted/30">
-      <div className="container mx-auto px-4 lg:px-8">
+    <section id="team" className="py-24 bg-muted/30 relative overflow-hidden cursor-pointer" onClick={handleRipple}>
+      {/* Ripple Effects */}
+      {ripples.map((ripple) => (
+        <div
+          key={ripple.id}
+          className="absolute w-4 h-4 rounded-full bg-secondary/30 animate-ripple pointer-events-none z-50"
+          style={{
+            left: ripple.x,
+            top: ripple.y,
+            transform: "translate(-50%, -50%)",
+          }}
+        />
+      ))}
+      
+      {/* Floating elements */}
+      <div className="absolute top-10 right-1/4 w-36 h-36 bg-accent/10 rounded-full blur-3xl animate-float" />
+      <div className="absolute bottom-10 left-1/4 w-44 h-44 bg-primary/10 rounded-full blur-3xl animate-drift" style={{ animationDelay: "3s" }} />
+      
+      <div className="container mx-auto px-4 lg:px-8 relative z-10">
         <div className="text-center mb-16 space-y-4">
           <h2 className="text-4xl md:text-5xl font-bold">
             Meet The <span className="text-gradient">Team</span>

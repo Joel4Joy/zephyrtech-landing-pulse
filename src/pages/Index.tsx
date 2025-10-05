@@ -1,13 +1,39 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState, useEffect } from "react";
+import { Loader } from "@/components/Loader";
+import { Navbar } from "@/components/Navbar";
+import { Hero } from "@/components/Hero";
+import { Features } from "@/components/Features";
+import { Carousel } from "@/components/Carousel";
+import { Stats } from "@/components/Stats";
+import { Logos } from "@/components/Logos";
+import { Testimonials } from "@/components/Testimonials";
+import { Team } from "@/components/Team";
+import { Footer } from "@/components/Footer";
 
 const Index = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Set dark mode by default
+    document.documentElement.classList.add("dark");
+  }, []);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <>
+      {isLoading && <Loader onComplete={() => setIsLoading(false)} />}
+      
+      <div className={isLoading ? "hidden" : "animate-fade-in"}>
+        <Navbar />
+        <Hero />
+        <Features />
+        <Carousel />
+        <Stats />
+        <Logos />
+        <Testimonials />
+        <Team />
+        <Footer />
       </div>
-    </div>
+    </>
   );
 };
 
